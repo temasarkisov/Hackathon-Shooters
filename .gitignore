@@ -1,1 +1,7 @@
 .*
+*.zip
+.DS_Store
+*.exe
+*.out
+*.wav
+*.csv
