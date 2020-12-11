@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>django-chartjs line chart demo</title>
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">GPEG</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample01"
+            aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExample01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">G - Gay</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">P - Pride</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">E - Enternational</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="#">G - Gang</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div>
+    <div class="row">
+        <div class="col-4">
+            <canvas id="myChart" width="100%" height="100%"></canvas>
+        </div>
+    </div>
+</div>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file">
+    <br>
+    <input type="submit">
+    <p> {{ result }} </p>
+</form>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+<script type="text/javascript">
+    $.get('{% url "line_chart_json" %}', function (data) {
+        var ctx = $("#myChart").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'line', data: data
+        });
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

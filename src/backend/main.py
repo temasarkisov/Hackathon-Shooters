@@ -13,7 +13,7 @@ import pandas as pd
 import os
 
 
-PACKAGE_PARENT = './media'
+PACKAGE_PARENT = '../../media'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 PATH_TO_MEDIA = os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT))
 
@@ -44,7 +44,9 @@ def extract_features(file_name):
 
 
 def get_result():
-    model = load_model("../training/model_model.h5")
+    # model = load_model("../training/model_model.h5")
+    model = load_model("src/training/model_model.h5")
+
     only_files = [f for f in os.listdir(PATH_TO_MEDIA) if os.path.isfile(os.path.join(PATH_TO_MEDIA, f))]
     file_name = only_files[0]
     path_to_file = PATH_TO_MEDIA + '/' + file_name
@@ -56,4 +58,4 @@ def get_result():
 
 #model = create_model()
 #model.load_weights("../training/model_model.h5")
-result = get_result()
+#result = get_result()
