@@ -10,6 +10,14 @@ import librosa
 
 import pandas as pd
 
+import os
+
+
+PACKAGE_PARENT = './media'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+PATH_TO_MEDIA = os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT))
+
+
 def create_model(input_shape=(40,)):
     num_labels = 10
     model = Sequential()
@@ -30,24 +38,22 @@ def extract_features(file_name):
     mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40)
     mfccs_processed = np.mean(mfccs.T,axis=0)
     mfccs_processed_np = np.array(mfccs_processed.tolist())
-    print(mfccs_processed_np.shape, type(mfccs_processed_np))
-    #result = model.predict(mfccs_processed_np)
-    return mfccs_processed
+    print(mfccs_processed_np)
+    #print(mfccs_processed_np.shape, type(mfccs_processed_np))
+    return mfccs_processed_np
 
 
 def get_result():
-    file_name = '99710-9-0-5.wav'  # Сделать нормально, по пути, а не по имени файла
-    features = extract_features(file_name)
-    #featuresdf = pd.DataFrame(features, columns=['feature'])
-    #data = np.array(featuresdf.feature.tolist())
-    #print(featuresdf)
-
-    #test = load_audio(file_name)
-    #result = model.predict(test)
-    #return result
+    model = load_model("../training/model_model.h5")
+    only_files = [f for f in os.listdir(PATH_TO_MEDIA) if os.path.isfile(os.path.join(PATH_TO_MEDIA, f))]
+    file_name = only_files[0]
+    path_to_file = PATH_TO_MEDIA + '/' + file_name
+    mfccs_processed_np = extract_features(path_to_file)
+    #result = model.predict(mfccs_processed_np)
+    result = 1
+    return result
 
 
 #model = create_model()
 #model.load_weights("../training/model_model.h5")
-model = load_model("../training/model_model.h5")
-get_result()
+result = get_result()
