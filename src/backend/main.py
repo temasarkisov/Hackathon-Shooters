@@ -51,10 +51,8 @@ def extract_features(file_name):
     return mfccs_processed
 
 
-def get_result():
+def get_result(file_name):
     # Get path
-    only_files = [f for f in os.listdir(PATH_TO_MEDIA) if os.path.isfile(os.path.join(PATH_TO_MEDIA, f))]
-    file_name = only_files[0]
     path_to_file = PATH_TO_MEDIA + '/' + file_name
 
     # Load data
@@ -75,9 +73,11 @@ def get_result():
     for weight in result_weights[0]:
         weights_array.append(weight)
     result = weights_array.index(max(weights_array))
+    print(result)
+    print(result_weights)
     return result
 
 
 # model = create_model()
 # model.load_weights("../training/model_model.h5")
-result = get_result()
+# result = get_result()
