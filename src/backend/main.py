@@ -37,20 +37,33 @@ def extract_features(file_name):
     audio, sample_rate = librosa.load(file_name, res_type='kaiser_fast')
     mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40)
     mfccs_processed = np.mean(mfccs.T,axis=0)
-    mfccs_processed_np = np.array(mfccs_processed.tolist())
-    print(mfccs_processed_np)
-    #print(mfccs_processed_np.shape, type(mfccs_processed_np))
-    return mfccs_processed_np
+    return mfccs_processed
 
 
 def get_result():
-    model = load_model("../training/model_model.h5")
+    # Get path
     only_files = [f for f in os.listdir(PATH_TO_MEDIA) if os.path.isfile(os.path.join(PATH_TO_MEDIA, f))]
     file_name = only_files[0]
     path_to_file = PATH_TO_MEDIA + '/' + file_name
-    mfccs_processed_np = extract_features(path_to_file)
-    #result = model.predict(mfccs_processed_np)
-    result = 1
+    
+    # Load data
+    data = extract_features(path_to_file)
+    features = []
+    features.append([data, 'none'])
+    featuresdf = pd.DataFrame(features, columns=['feature','class_label'])
+    data_to_predict = np.array(featuresdf.feature.tolist())
+
+    # Load model
+    model = load_model("../training/model_model.h5")
+    model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
+    model.summary()
+
+    # Loading data to model and predict
+    weights_array = []
+    result_weights = model.predict(data_to_predict)
+    for weight in result_weights[0]:
+        weights_array.append(weight)
+    result = weights_array.index(max(weights_array))    
     return result
 
 
