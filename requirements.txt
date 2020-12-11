@@ -7,3 +7,5 @@ sklearn
 comet-ml
 tensorflow
 keras
+Django==2.2.3
+
