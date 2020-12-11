@@ -12,6 +12,10 @@ import pandas as pd
 
 import os
 
+from scipy.io import wavfile as wav
+
+import matplotlib.pyplot as plt
+
 
 PACKAGE_PARENT = './media'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
@@ -34,9 +38,17 @@ def create_model(input_shape=(40,)):
 
 
 def extract_features(file_name):
+    # Extract features 
     audio, sample_rate = librosa.load(file_name, res_type='kaiser_fast')
     mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40)
     mfccs_processed = np.mean(mfccs.T,axis=0)
+
+    # Load image
+    scipy_sample_rate, scipy_audio = wav.read(file_name)
+    plt.figure(figsize=(12, 4))
+    plt.plot(scipy_audio)
+    plt.savefig(PATH_TO_MEDIA + '/audio.png')
+
     return mfccs_processed
 
 
